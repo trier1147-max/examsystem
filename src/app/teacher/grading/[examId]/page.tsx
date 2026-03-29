@@ -15,6 +15,7 @@ import {
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { mockQuestions } from '@/mock/data';
+import { PBadge } from '@/components/ui/pbadge';
 
 // ── Mock data ───────────────────────────────────────────────────────────────
 
@@ -310,9 +311,9 @@ export default function GradingWorkbenchPage() {
             </button>
             <button
               onClick={() => setBatchOpen(true)}
-              className="text-xs px-2 py-1 rounded-md border border-gray-200 text-gray-600 hover:border-gray-400 transition-colors"
+              className="flex items-center gap-1 text-xs px-2 py-1 rounded-md border border-gray-200 text-gray-600 hover:border-gray-400 transition-colors"
             >
-              批量确认
+              批量确认 <PBadge p="P1" />
             </button>
           </div>
         </div>
@@ -360,7 +361,7 @@ export default function GradingWorkbenchPage() {
           {/* Essay questions group */}
           {ESSAY_QS.length > 0 && (
             <div>
-              <p className="text-xs font-semibold text-muted-foreground px-2 py-1">论述题（待批改）</p>
+              <p className="flex items-center gap-1 text-xs font-semibold text-muted-foreground px-2 py-1">论述题（待批改）<PBadge p="P1" /></p>
               <div className="space-y-1">
                 {ESSAY_QS.map((q, idx) => {
                   const absIdx = SHORT_QS.length + idx;
@@ -415,7 +416,7 @@ export default function GradingWorkbenchPage() {
         {viewMode === 'auto-review' && (
           <div className="max-w-3xl mx-auto px-6 py-5 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-base font-semibold text-gray-900">自动批改详情</h2>
+              <h2 className="flex items-center gap-1.5 text-base font-semibold text-gray-900">自动批改详情 <PBadge p="P0" /></h2>
               <Button variant="outline" size="sm" className="text-xs h-8"
                 onClick={() => setViewMode('grading')}>
                 返回阅卷
@@ -548,7 +549,7 @@ export default function GradingWorkbenchPage() {
                       className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-gray-700 transition-colors"
                       onClick={() => setKwExpanded(e => !e)}
                     >
-                      评分关键词（{hitKeywords.length}/{keywords.length} 命中）
+                      <span className="flex items-center gap-1">评分关键词（{hitKeywords.length}/{keywords.length} 命中）<PBadge p="P0" /></span>
                       {kwExpanded ? <ChevronUpIcon size={12} /> : <ChevronDown size={12} />}
                     </button>
                     {kwExpanded && (
@@ -776,7 +777,7 @@ export default function GradingWorkbenchPage() {
       <Dialog open={batchOpen} onOpenChange={setBatchOpen}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>批量确认评分</DialogTitle>
+            <DialogTitle className="flex items-center gap-1.5">批量确认评分 <PBadge p="P1" /></DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground">
             将使用系统建议分批量确认所有尚未手动评分的答卷。已人工评分的记录不受影响。

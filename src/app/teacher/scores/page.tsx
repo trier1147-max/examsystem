@@ -23,6 +23,7 @@ import {
 } from 'recharts';
 import { mockSubmissions, mockExams } from '@/mock/data';
 import { toast } from 'sonner';
+import { PBadge } from '@/components/ui/pbadge';
 
 const scoreRanges = [
   { range: '0-59', min: 0, max: 59, label: '不及格' },
@@ -70,7 +71,7 @@ export default function ScoresPage() {
         <h1 className="text-xl font-bold text-gray-900">成绩管理</h1>
         <Button variant="outline" className="gap-1.5" onClick={handleExport}>
           <Download size={15} />
-          导出报表
+          导出报表 <PBadge p="P0" />
         </Button>
       </div>
 
@@ -117,7 +118,7 @@ export default function ScoresPage() {
         {/* Chart */}
         <Card className="shadow-none border lg:col-span-1">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm">分数段分布</CardTitle>
+            <CardTitle className="flex items-center gap-1.5 text-sm">分数段分布 <PBadge p="P0" /></CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={220}>
@@ -138,7 +139,7 @@ export default function ScoresPage() {
         {/* Score table */}
         <Card className="shadow-none border lg:col-span-2">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm">成绩明细</CardTitle>
+            <CardTitle className="flex items-center gap-1.5 text-sm">成绩明细 <PBadge p="P1" /></CardTitle>
           </CardHeader>
           <CardContent className="p-0 max-h-[280px] overflow-y-auto">
             <table className="w-full text-sm">

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { cn } from '@/lib/utils';
+import { PBadge } from '@/components/ui/pbadge';
 
 const TEACHER_NOTIFS = [
   {
@@ -38,12 +39,12 @@ const TEACHER_NOTIFS = [
 ];
 
 const navItems = [
-  { href: '/teacher', label: '首页', icon: Home },
-  { href: '/teacher/question-bank', label: '题库管理', icon: BookOpen },
-  { href: '/teacher/create-exam', label: '智能组卷', icon: Layers },
-  { href: '/teacher/exams', label: '考试管理', icon: ClipboardList },
-  { href: '/teacher/grading', label: '阅卷中心', icon: PenLine },
-  { href: '/teacher/scores', label: '成绩管理', icon: BarChart2 },
+  { href: '/teacher',              label: '首页',   icon: Home,         p: 'P1' as const },
+  { href: '/teacher/question-bank',label: '题库管理',icon: BookOpen,     p: 'P0' as const },
+  { href: '/teacher/create-exam',  label: '智能组卷',icon: Layers,       p: 'P0' as const },
+  { href: '/teacher/exams',        label: '考试管理',icon: ClipboardList,p: 'P0' as const },
+  { href: '/teacher/grading',      label: '阅卷中心',icon: PenLine,      p: 'P0' as const },
+  { href: '/teacher/scores',       label: '成绩管理',icon: BarChart2,    p: 'P0' as const },
 ];
 
 export function TeacherSidebar() {
@@ -70,7 +71,7 @@ export function TeacherSidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-        {navItems.map(({ href, label, icon: Icon }) => {
+        {navItems.map(({ href, label, icon: Icon, p }) => {
           const isActive =
             href === '/teacher' ? pathname === '/teacher' : pathname.startsWith(href);
           return (
@@ -85,7 +86,8 @@ export function TeacherSidebar() {
               )}
             >
               <Icon size={18} />
-              {label}
+              <span className="flex-1">{label}</span>
+              <PBadge p={p} />
             </Link>
           );
         })}

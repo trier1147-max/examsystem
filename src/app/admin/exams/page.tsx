@@ -5,6 +5,7 @@ import { Clock, CheckCircle2, Play, AlertCircle, ChevronRight } from 'lucide-rea
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { PBadge } from '@/components/ui/pbadge';
 import { cn } from '@/lib/utils';
 
 const EXAMS = [
@@ -46,7 +47,7 @@ export default function AdminExamsPage() {
   return (
     <div className="p-6 space-y-5 max-w-4xl">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">考试管理</h1>
+        <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">考试管理 <PBadge p="P0" /></h1>
         <p className="text-sm text-muted-foreground mt-0.5">信息学院 · 本学期所有考试</p>
       </div>
       <div className="space-y-3">
@@ -62,6 +63,7 @@ export default function AdminExamsPage() {
                       <Badge variant="secondary" className={cn('text-xs flex items-center gap-1', cfg.bg, cfg.color)}>
                         {cfg.icon}{cfg.label}
                       </Badge>
+                      {exam.status === 'grading' && <PBadge p="P1" />}
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {exam.teacher}老师 · {exam.startTime} — {exam.endTime.slice(11)}

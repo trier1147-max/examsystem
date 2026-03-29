@@ -11,6 +11,7 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
+import { PBadge } from '@/components/ui/pbadge';
 import { mockStudentScores } from '@/mock/data';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -358,7 +359,7 @@ export default function ScoreDetailPage() {
       {/* Filter tabs + full review */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-gray-900">完整试卷回顾</h2>
+          <h2 className="text-sm font-semibold text-gray-900 flex items-center gap-2">完整试卷回顾 <PBadge p="P1" /></h2>
           <div className="flex gap-1.5">
             {([
               ['all',        '全部题目'],
@@ -523,7 +524,7 @@ export default function ScoreDetailPage() {
       <div className="rounded-xl border p-4 space-y-3">
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">成绩申诉</h3>
+            <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">成绩申诉 <PBadge p="P1" /></h3>
             <p className="text-xs text-muted-foreground mt-0.5">
               如对评分存在异议，可提交申诉，教师将在 3 个工作日内复核
             </p>

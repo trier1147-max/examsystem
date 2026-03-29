@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from '@/components/ui/dialog';
+import { PBadge } from '@/components/ui/pbadge';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -127,6 +128,7 @@ export default function NotificationsPage() {
                 >
                   {cfg.icon}
                   {cfg.label}
+                  {(type === 'exam' || type === 'publish' || type === 'grading') && <PBadge p="P1" />}
                   <span className="ml-auto text-xs opacity-60">点击编辑 →</span>
                 </button>
               );
@@ -173,7 +175,7 @@ export default function NotificationsPage() {
 
       {/* History */}
       <div>
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">通知记录</h2>
+        <h2 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">通知记录 <PBadge p="P1" /></h2>
         <div className="space-y-2">
           {history.map(n => {
             const cfg = TYPE_CFG[n.type];

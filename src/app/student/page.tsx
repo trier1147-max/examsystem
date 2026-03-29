@@ -17,6 +17,7 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
+import { PBadge } from '@/components/ui/pbadge';
 import { useStore } from '@/store/useStore';
 import { mockExams, mockStudentScores, mockQuestions } from '@/mock/data';
 import { cn } from '@/lib/utils';
@@ -169,7 +170,7 @@ export default function StudentHomePage() {
       <div>
         <div className="flex items-center gap-2 mb-3">
           <BookOpen size={15} className="text-muted-foreground" />
-          <h2 className="text-sm font-semibold text-gray-900">待参加考试</h2>
+          <h2 className="text-sm font-semibold text-gray-900 flex items-center gap-2">待参加考试 <PBadge p="P0" /></h2>
         </div>
 
         {upcomingExams.length === 0 ? (
@@ -221,8 +222,8 @@ export default function StudentHomePage() {
                     {isOngoing && (
                       <div className="flex items-center gap-1.5 mt-2">
                         <Clock size={13} className="text-red-500" />
-                        <span className="text-sm font-semibold text-red-600 tabular-nums">
-                          距考试结束还有 {formatCountdown(countdownSec)}
+                        <span className="text-sm font-semibold text-red-600 tabular-nums flex items-center gap-2">
+                          距考试结束还有 {formatCountdown(countdownSec)} <PBadge p="P0" />
                         </span>
                       </div>
                     )}
@@ -239,7 +240,7 @@ export default function StudentHomePage() {
                         className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-gray-900 transition-colors"
                       >
                         <Info size={13} />
-                        考试须知
+                        考试须知 <PBadge p="P1" />
                       </button>
                       {/* 申请缓考：仅未开始的考试可申请 */}
                       {!isOngoing && (
@@ -254,7 +255,7 @@ export default function StudentHomePage() {
                             className="flex items-center gap-1.5 text-xs text-amber-600 hover:text-amber-800 transition-colors"
                           >
                             <FileQuestion size={13} />
-                            申请缓考
+                            申请缓考 <PBadge p="P1" />
                           </button>
                         )
                       )}
@@ -283,7 +284,7 @@ export default function StudentHomePage() {
         <div>
           <div className="flex items-center gap-2 mb-3">
             <FileX2 size={15} className="text-muted-foreground" />
-            <h2 className="text-sm font-semibold text-gray-900">缓考安排</h2>
+            <h2 className="text-sm font-semibold text-gray-900 flex items-center gap-2">缓考安排 <PBadge p="P1" /></h2>
           </div>
           <div className="space-y-3">
             {DEFERRED_EXAMS.map(exam => (

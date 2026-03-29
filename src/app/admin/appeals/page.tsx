@@ -12,6 +12,7 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
+import { PBadge } from '@/components/ui/pbadge';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -221,7 +222,7 @@ export default function AppealsPage() {
         {qs.length > 0 && (
           <Card className="shadow-none border">
             <CardContent className="p-5">
-              <h3 className="text-sm font-semibold text-gray-800 mb-3">答卷复核</h3>
+              <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">答卷复核 <PBadge p="P1" /></h3>
               <div className="space-y-3">
                 {qs.map(q => (
                   <div key={q.no} className="border rounded-lg overflow-hidden">
@@ -316,7 +317,7 @@ export default function AppealsPage() {
         {/* Correction log */}
         {corrLog.length > 0 && (
           <div>
-            <p className="text-sm font-medium text-gray-700 mb-2">修正记录</p>
+            <p className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">修正记录 <PBadge p="P1" /></p>
             {corrLog.map((c, i) => (
               <div key={i} className="text-xs border rounded-lg px-4 py-3 bg-gray-50/40 mb-2">
                 <div className="text-muted-foreground mb-0.5">{c.time} · 李老师（教学秘书）</div>
@@ -360,7 +361,7 @@ export default function AppealsPage() {
     <div className="p-6 space-y-5 max-w-4xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">成绩申诉</h1>
+          <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">成绩申诉 <PBadge p="P1" /></h1>
           <p className="text-sm text-muted-foreground mt-0.5">复核答卷 · 修正分数 · 全程追溯</p>
         </div>
         {pendingCount > 0 && (

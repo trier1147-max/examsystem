@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { PBadge } from '@/components/ui/pbadge';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -76,7 +77,7 @@ export default function AdminDashboardPage() {
 
       {/* ── 当前考试动态 ── */}
       <section>
-        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">当前考试动态</h2>
+        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">当前考试动态 <PBadge p="P0" /></h2>
         <div className="space-y-3">
           {/* Live */}
           <Card className="shadow-none border-2 border-green-200 bg-green-50/30">
@@ -162,7 +163,7 @@ export default function AdminDashboardPage() {
 
       {/* ── 阅卷进度 ── */}
       <section>
-        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">阅卷进度</h2>
+        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">阅卷进度 <PBadge p="P1" /></h2>
         <div className="space-y-2">
           {GRADING_PROGRESS.map(item => (
             <Card key={item.id} className={cn('shadow-none border', item.progress < 100 && item.deadlineDays && item.deadlineDays <= 5 ? 'border-orange-200' : '')}>
@@ -197,7 +198,7 @@ export default function AdminDashboardPage() {
                     {item.progress < 100 ? (
                       <Button size="sm" variant="outline" className="text-xs gap-1"
                         onClick={() => toast.success(`已向${item.teacher}老师发送阅卷催促通知`)}>
-                        <Bell size={11} /> 提醒老师
+                        <Bell size={11} /> 提醒老师 <PBadge p="P1" />
                       </Button>
                     ) : (
                       <>
@@ -218,7 +219,7 @@ export default function AdminDashboardPage() {
       {/* ── 最近成绩概览 ── */}
       <section>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">最近成绩概览</h2>
+          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2">最近成绩概览 <PBadge p="P0" /></h2>
           <button className="text-xs text-blue-600 flex items-center gap-0.5 hover:underline"
             onClick={() => router.push('/admin/analysis')}>
             查看详细分析 <ChevronRight size={12} />

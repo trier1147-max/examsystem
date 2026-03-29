@@ -7,16 +7,17 @@ import {
 } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { cn } from '@/lib/utils';
+import { PBadge } from '@/components/ui/pbadge';
 
 // Pending appeal count — in a real app this would come from global state / SWR
 const PENDING_APPEALS = 3;
 
 const navItems = [
-  { href: '/admin/dashboard', label: '学院仪表盘', icon: Home,          badge: 0 },
-  { href: '/admin/exams',     label: '考试管理',   icon: ClipboardList, badge: 0 },
-  { href: '/admin/analysis',  label: '成绩分析',   icon: BarChart2,     badge: 0 },
-  { href: '/admin/appeals',   label: '成绩申诉',   icon: FileSearch,    badge: PENDING_APPEALS },
-  { href: '/admin/notifications', label: '通知中心', icon: Bell,         badge: 0 },
+  { href: '/admin/dashboard',      label: '学院仪表盘', icon: Home,          badge: 0,               p: 'P0' as const },
+  { href: '/admin/exams',          label: '考试管理',   icon: ClipboardList, badge: 0,               p: 'P0' as const },
+  { href: '/admin/analysis',       label: '成绩分析',   icon: BarChart2,     badge: 0,               p: 'P0' as const },
+  { href: '/admin/appeals',        label: '成绩申诉',   icon: FileSearch,    badge: PENDING_APPEALS, p: 'P1' as const },
+  { href: '/admin/notifications',  label: '通知中心',   icon: Bell,          badge: 0,               p: 'P1' as const },
 ];
 
 export function AdminSidebar() {
@@ -42,7 +43,7 @@ export function AdminSidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-        {navItems.map(({ href, label, icon: Icon, badge }) => {
+        {navItems.map(({ href, label, icon: Icon, badge, p }) => {
           const isActive =
             href === '/admin' ? pathname === '/admin' : pathname.startsWith(href);
           return (
@@ -50,14 +51,15 @@ export function AdminSidebar() {
               key={href}
               href={href}
               className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                'flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
                 isActive
                   ? 'bg-white/15 text-white'
                   : 'text-white/65 hover:bg-white/10 hover:text-white'
               )}
             >
-              <Icon size={18} />
+              <Icon size={18} className="flex-shrink-0" />
               <span className="flex-1">{label}</span>
+              <PBadge p={p} />
               {badge > 0 && (
                 <span className="min-w-5 h-5 px-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold leading-none">
                   {badge}

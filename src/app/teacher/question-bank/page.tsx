@@ -23,6 +23,7 @@ import {
 import { mockQuestions, type Question, type QuestionType, type Difficulty } from '@/mock/data';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { PBadge } from '@/components/ui/pbadge';
 
 // ── constants ──────────────────────────────────────────────────────────────
 const FIXED_SUBJECT = '全部';
@@ -408,7 +409,7 @@ export default function QuestionBankPage() {
         <div className="flex gap-2">
           <Button variant="outline" className="gap-1.5" onClick={() => { setImportOpen(true); setImportStep(1); }}>
             <Upload size={15} />
-            批量导入
+            批量导入 <PBadge p="P0" />
           </Button>
           <Button
             className="gap-1.5 text-white"
@@ -416,7 +417,7 @@ export default function QuestionBankPage() {
             onClick={() => { setForm(emptyForm(subjects)); setSlideOpen(true); }}
           >
             <Plus size={16} />
-            新增题目
+            新增题目 <PBadge p="P0" />
           </Button>
         </div>
       </div>
@@ -425,7 +426,7 @@ export default function QuestionBankPage() {
         {/* ── Subject / Chapter sidebar ── */}
         <Card className="w-52 shadow-none border flex-shrink-0 h-fit">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm">学科分类</CardTitle>
+            <CardTitle className="flex items-center gap-1.5 text-sm">学科分类 <PBadge p="P0" /></CardTitle>
           </CardHeader>
           <CardContent className="p-2 space-y-0.5">
             {/* All */}
@@ -646,8 +647,8 @@ export default function QuestionBankPage() {
                 <div className="py-16 text-center text-muted-foreground text-sm">
                   <p className="mb-2">该分类下暂无题目</p>
                   <div className="flex justify-center gap-2">
-                    <Button size="sm" variant="outline" onClick={() => { setForm(emptyForm(subjects)); setSlideOpen(true); }}>录入题目</Button>
-                    <Button size="sm" variant="outline" onClick={() => { setImportOpen(true); setImportStep(1); }}>批量导入</Button>
+                    <Button size="sm" variant="outline" className="gap-1" onClick={() => { setForm(emptyForm(subjects)); setSlideOpen(true); }}>录入题目 <PBadge p="P0" /></Button>
+                    <Button size="sm" variant="outline" className="gap-1" onClick={() => { setImportOpen(true); setImportStep(1); }}>批量导入 <PBadge p="P0" /></Button>
                   </div>
                 </div>
               ) : (
@@ -744,9 +745,10 @@ export default function QuestionBankPage() {
                             <td className="py-3 px-4" onClick={(e) => e.stopPropagation()}>
                               <div className="flex items-center gap-1">
                                 <button title="展开预览"
-                                  className="p-1 rounded hover:bg-muted text-muted-foreground"
+                                  className="p-1 rounded hover:bg-muted text-muted-foreground flex items-center gap-1"
                                   onClick={() => setExpandedRowId(isExpanded ? null : q.id)}>
                                   {isExpanded ? <EyeOff size={13} /> : <Eye size={13} />}
+                                  <PBadge p="P1" />
                                 </button>
                                 <button title="编辑"
                                   className="p-1 rounded hover:bg-muted text-muted-foreground"
@@ -799,7 +801,7 @@ export default function QuestionBankPage() {
             {/* Panel header */}
             <div className="flex items-center justify-between px-5 py-4 border-b">
               <div>
-                <h2 className="font-semibold text-gray-900">{editingQuestion ? '编辑题目' : '新增题目'}</h2>
+                <h2 className="flex items-center gap-1.5 font-semibold text-gray-900">{editingQuestion ? '编辑题目' : '新增题目'} <PBadge p="P0" /></h2>
                 {editingQuestion && <p className="text-xs text-muted-foreground font-mono mt-0.5">{editingQuestion.id}</p>}
               </div>
               <button onClick={closeSlide} className="text-muted-foreground hover:text-gray-700 p-1 rounded hover:bg-muted">
@@ -1140,7 +1142,7 @@ export default function QuestionBankPage() {
       <Dialog open={importOpen} onOpenChange={(o) => { if (!o) { setImportOpen(false); setImportStep(1); setImportFileName(''); } }}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>批量导入题目</DialogTitle>
+            <DialogTitle className="flex items-center gap-1.5">批量导入题目 <PBadge p="P0" /></DialogTitle>
           </DialogHeader>
 
           {/* Step indicator */}

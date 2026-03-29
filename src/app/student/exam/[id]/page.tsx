@@ -16,6 +16,7 @@ import {
   DialogFooter,
   DialogDescription,
 } from '@/components/ui/dialog';
+import { PBadge } from '@/components/ui/pbadge';
 import { useStore } from '@/store/useStore';
 import { mockExamPaper, type Question } from '@/mock/data';
 import { cn } from '@/lib/utils';
@@ -202,14 +203,14 @@ export default function ExamPage() {
         style={{ background: violations > 0 ? '#fee2e2' : '#fef3c7', color: violations > 0 ? '#991b1b' : '#92400e' }}
       >
         <AlertTriangle size={13} />
-        考试进行中，请诚信作答。禁止切换窗口，系统将记录异常行为。
+        考试进行中，请诚信作答。禁止切换窗口，系统将记录异常行为。<PBadge p="P0" />
         {violations > 0 && <span className="ml-1 font-bold">（已记录 {violations} 次违规）</span>}
       </div>
 
       {/* Top bar */}
       <header className="bg-white border-b sticky top-0 z-20">
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center gap-4">
-          <h1 className="font-bold text-sm flex-1 truncate">数据结构期中考试</h1>
+          <h1 className="font-bold text-sm flex-1 truncate flex items-center gap-2">数据结构期中考试 <PBadge p="P0" /></h1>
           <div className={cn(
             'flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono font-bold text-sm',
             !started ? 'bg-gray-100 text-gray-400' :
@@ -218,7 +219,7 @@ export default function ExamPage() {
             'bg-gray-100 text-gray-700'
           )}>
             <Clock size={14} />
-            {started ? formatTime(timeLeft) : formatTime(DURATION_SECONDS)}
+            {started ? formatTime(timeLeft) : formatTime(DURATION_SECONDS)} <PBadge p="P0" />
           </div>
           <Button
             size="sm"
@@ -394,6 +395,7 @@ export default function ExamPage() {
       {started && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-20">
           <div className="max-w-4xl mx-auto px-4 py-2.5">
+            <p className="text-xs font-semibold text-muted-foreground mb-1.5 flex items-center gap-1.5">答题卡 <PBadge p="P0" /></p>
             <div className="flex items-start gap-5 overflow-x-auto">
               {questionGroups.map(group => (
                 <div key={group.type} className="flex-shrink-0">
@@ -461,7 +463,7 @@ export default function ExamPage() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <CheckCircle2 size={18} className="text-blue-600" />
-              考试须知
+              考试须知 <PBadge p="P0" />
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-3 py-1 text-sm">
@@ -479,11 +481,12 @@ export default function ExamPage() {
                 <span className="font-semibold">100 分</span>
               </div>
             </div>
+            <p className="text-xs font-semibold text-gray-600 flex items-center gap-1.5">防作弊规则 <PBadge p="P0" /></p>
             <ul className="space-y-1.5 text-xs text-gray-700">
-              {(EXAM_ANTI_CHEAT[examId] ?? EXAM_ANTI_CHEAT.default).map(tip => (
+              {(EXAM_ANTI_CHEAT[examId] ?? EXAM_ANTI_CHEAT.default).map((tip, idx, arr) => (
                 <li key={tip} className="flex items-start gap-2">
                   <AlertTriangle size={12} className="text-yellow-500 mt-0.5 flex-shrink-0" />
-                  {tip}
+                  {tip}{idx === arr.length - 1 && <span className="ml-1 inline-flex items-center"><PBadge p="P0" /></span>}
                 </li>
               ))}
             </ul>

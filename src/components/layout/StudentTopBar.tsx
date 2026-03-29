@@ -7,11 +7,12 @@ import { GraduationCap, LogOut, Bell, CheckCircle2, FileText } from 'lucide-reac
 import { useStore } from '@/store/useStore';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { PBadge } from '@/components/ui/pbadge';
 
 const navItems = [
-  { href: '/student', label: '我的考试' },
-  { href: '/student/scores', label: '成绩查询' },
-  { href: '/student/practice', label: '题库练习' },
+  { href: '/student',          label: '我的考试', p: 'P0' as const },
+  { href: '/student/scores',   label: '成绩查询', p: 'P0' as const },
+  { href: '/student/practice', label: '题库练习', p: 'P2' as const },
 ];
 
 const MOCK_NOTIFS = [
@@ -63,7 +64,7 @@ export function StudentTopBar() {
 
       {/* Nav */}
       <nav className="flex items-center gap-1">
-        {navItems.map(({ href, label }) => {
+        {navItems.map(({ href, label, p }) => {
           const isActive =
             href === '/student' ? pathname === '/student' : pathname.startsWith(href);
           return (
@@ -71,7 +72,7 @@ export function StudentTopBar() {
               key={href}
               href={href}
               className={cn(
-                'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
                 isActive
                   ? 'text-white'
                   : 'text-muted-foreground hover:text-foreground hover:bg-muted'
@@ -79,6 +80,7 @@ export function StudentTopBar() {
               style={isActive ? { background: '#002045' } : undefined}
             >
               {label}
+              <PBadge p={p} />
             </Link>
           );
         })}

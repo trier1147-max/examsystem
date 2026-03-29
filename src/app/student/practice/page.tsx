@@ -12,6 +12,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { PBadge } from '@/components/ui/pbadge';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -832,16 +833,16 @@ export default function PracticePage() {
   const unmasteredCount = wrongRecords.filter(r => r.mastery === 'unmastered').length;
 
   const TABS = [
-    { value: 'chapter', label: '按章节', icon: BookOpen },
-    { value: 'wrong',   label: '错题重做', icon: XCircle },
-    { value: 'mock',    label: '模拟考试', icon: Target },
-    { value: 'board',   label: '学习看板', icon: BarChart2 },
+    { value: 'chapter', label: '按章节', badge: 'P2' as const, icon: BookOpen },
+    { value: 'wrong',   label: '错题重做', badge: 'P2' as const, icon: XCircle },
+    { value: 'mock',    label: '模拟考试', badge: 'P2' as const, icon: Target },
+    { value: 'board',   label: '学习看板', badge: null, icon: BarChart2 },
   ] as const;
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-5">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">题库练习</h1>
+        <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">题库练习 <PBadge p="P2" /></h1>
         <p className="text-sm text-muted-foreground mt-0.5">巩固知识，查漏补缺</p>
       </div>
 
@@ -864,7 +865,7 @@ export default function PracticePage() {
 
       {/* Tabs */}
       <div className="flex gap-1 border-b border-gray-200">
-        {TABS.map(({ value, label, icon: Icon }) => (
+        {TABS.map(({ value, label, badge, icon: Icon }) => (
           <button
             key={value}
             onClick={() => setMode(value)}
@@ -875,7 +876,7 @@ export default function PracticePage() {
                 : 'border-transparent text-muted-foreground hover:text-gray-700'
             )}
           >
-            <Icon size={13} /> {label}
+            <Icon size={13} /> {label}{badge && <PBadge p={badge} />}
           </button>
         ))}
       </div>
@@ -883,6 +884,7 @@ export default function PracticePage() {
       {/* ── 按章节练习 ─────────────────────────────────────────────────── */}
       {mode === 'chapter' && (
         <div className="space-y-3">
+          <p className="text-sm font-semibold text-gray-800 flex items-center gap-2">按章节练习 <PBadge p="P2" /></p>
           {/* Subject filter */}
           <div className="flex gap-1.5">
             {subjects.map(s => (
@@ -945,6 +947,7 @@ export default function PracticePage() {
       {/* ── 错题重做 ───────────────────────────────────────────────────── */}
       {mode === 'wrong' && (
         <div className="space-y-3">
+          <p className="text-sm font-semibold text-gray-800 flex items-center gap-2">错题重做 <PBadge p="P2" /></p>
           {/* Summary */}
           <div className="grid grid-cols-3 gap-2">
             {(['unmastered', 'reviewing', 'mastered'] as Mastery[]).map(m => {
@@ -1004,6 +1007,7 @@ export default function PracticePage() {
       {/* ── 模拟考试 ───────────────────────────────────────────────────── */}
       {mode === 'mock' && (
         <div className="space-y-4">
+          <p className="text-sm font-semibold text-gray-800 flex items-center gap-2">模拟考试 <PBadge p="P2" /></p>
           <Card className="shadow-none border">
             <CardContent className="p-5 space-y-4">
               <div className="flex items-center gap-2">

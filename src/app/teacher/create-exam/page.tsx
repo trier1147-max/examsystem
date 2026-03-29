@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/select';
 import { mockQuestions, type Question, type QuestionType, type Difficulty } from '@/mock/data';
 import { toast } from 'sonner';
+import { PBadge } from '@/components/ui/pbadge';
 
 // ── types ──────────────────────────────────────────────────────────────────
 interface SectionQuestion { qId: string; score: number; }
@@ -286,8 +287,8 @@ const updateQuestionScore = (sid: string, qid: string, score: number) => {
       {/* ── Tabs ── */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'manual' | 'auto')}>
         <TabsList>
-          <TabsTrigger value="manual">手动组卷</TabsTrigger>
-          <TabsTrigger value="auto">自动组卷</TabsTrigger>
+          <TabsTrigger value="manual" className="flex items-center gap-1">手动组卷 <PBadge p="P0" /></TabsTrigger>
+          <TabsTrigger value="auto" className="flex items-center gap-1">自动组卷 <PBadge p="P1" /></TabsTrigger>
         </TabsList>
 
         {/* ══ MANUAL ══════════════════════════════════════════════════════ */}
@@ -400,8 +401,8 @@ const updateQuestionScore = (sid: string, qid: string, score: number) => {
                   <Card key={s.id} className="shadow-none border">
                     {/* Section header */}
                     <div className="flex items-center gap-2 px-4 py-2.5 border-b bg-muted/20">
-                      <span className="text-sm font-semibold text-gray-800">
-                        {CHINESE_NUM[si] ?? si + 1}、{s.name}
+                      <span className="flex items-center gap-1.5 text-sm font-semibold text-gray-800">
+                        {CHINESE_NUM[si] ?? si + 1}、{s.name} <PBadge p="P0" />
                       </span>
                       <span className={`text-xs font-medium ${scoreWarning ? 'text-yellow-600' : 'text-muted-foreground'}`}>
                         （{scoreWarning && '⚠ '}目标{s.targetScore}分，当前{sectionScore}分）
@@ -554,7 +555,7 @@ const updateQuestionScore = (sid: string, qid: string, score: number) => {
                   )}
                   <div className="flex gap-2 pt-1">
                     <Button variant="outline" className="flex-1 gap-1.5" onClick={() => setPreviewOpen(true)} disabled={totalQuestions === 0}>
-                      <Eye size={14} /> 预览试卷
+                      <Eye size={14} /> 预览试卷 <PBadge p="P0" />
                     </Button>
                     <Button className="flex-1 text-white" style={{ background: '#002045' }} onClick={handleSave}>
                       保存试卷
@@ -775,7 +776,7 @@ const updateQuestionScore = (sid: string, qid: string, score: number) => {
       {/* ── Add section dialog ── */}
       <Dialog open={addSectionOpen} onOpenChange={setAddSectionOpen}>
         <DialogContent className="max-w-xs">
-          <DialogHeader><DialogTitle>新增大题</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle className="flex items-center gap-1.5">新增大题 <PBadge p="P0" /></DialogTitle></DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1">
               <Label className="text-xs">大题名称</Label>
@@ -843,7 +844,7 @@ const updateQuestionScore = (sid: string, qid: string, score: number) => {
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>试卷预览（学生视角）</DialogTitle>
+            <DialogTitle className="flex items-center gap-1.5">试卷预览（学生视角）<PBadge p="P0" /></DialogTitle>
           </DialogHeader>
           <div className="bg-white rounded border p-8 space-y-6 text-sm">
             <div className="text-center space-y-1">

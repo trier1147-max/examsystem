@@ -20,6 +20,7 @@ import {
 import { mockExams, mockMonitorStudents, type Exam, type ExamStatus } from '@/mock/data';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { PBadge } from '@/components/ui/pbadge';
 
 // ── Status config ─────────────────────────────────────────────────────────────
 
@@ -319,7 +320,7 @@ export default function ExamsPage() {
           </div>
 
           <Button className="gap-2 text-white" style={{ background: '#002045' }} onClick={() => setCreateOpen(true)}>
-            <Plus size={16} /> 创建考试
+            <Plus size={16} /> 创建考试 <PBadge p="P0" />
           </Button>
         </div>
       </div>
@@ -487,7 +488,7 @@ export default function ExamsPage() {
                             <div className="absolute right-0 top-full mt-1 w-36 bg-white border rounded-lg shadow-lg z-20 py-1">
                               <button className="flex items-center gap-2 w-full px-3 py-2 text-xs text-gray-700 hover:bg-muted transition-colors"
                                 onClick={() => handleCopyExam(exam)}>
-                                <Copy size={12} /> 复制考试
+                                <Copy size={12} /> 复制考试 <PBadge p="P2" />
                               </button>
                               <button className="flex items-center gap-2 w-full px-3 py-2 text-xs text-red-500 hover:bg-red-50 transition-colors"
                                 onClick={() => { setDeleteTarget(exam); setOpenMoreId(null); }}>
@@ -504,7 +505,7 @@ export default function ExamsPage() {
                       <Button size="sm" className="gap-1.5 text-xs h-8 text-white"
                         style={{ background: '#16a34a' }}
                         onClick={() => setMonitorExam(exam)}>
-                        <Monitor size={13} /> 监考视图
+                        <Monitor size={13} /> 监考视图 <PBadge p="P1" />
                       </Button>
                       <Button size="sm" variant="outline" className="gap-1.5 text-xs h-8"
                         onClick={() => setDetailExam(exam)}>
@@ -577,7 +578,7 @@ export default function ExamsPage() {
                             <div className="absolute right-0 top-full mt-1 w-36 bg-white border rounded-lg shadow-lg z-20 py-1">
                               <button className="flex items-center gap-2 w-full px-3 py-2 text-xs text-gray-700 hover:bg-muted transition-colors"
                                 onClick={() => handleCopyExam(exam)}>
-                                <Copy size={12} /> 复制考试
+                                <Copy size={12} /> 复制考试 <PBadge p="P2" />
                               </button>
                             </div>
                           </>
@@ -671,9 +672,9 @@ export default function ExamsPage() {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setMonitorExam(null)}>关闭</Button>
-            <Button className="text-white bg-red-600 hover:bg-red-700"
+            <Button className="gap-1.5 text-white bg-red-600 hover:bg-red-700"
               onClick={() => { if (monitorExam) setForceCollectExam(monitorExam); setMonitorExam(null); }}>
-              强制收卷
+              强制收卷 <PBadge p="P1" />
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -684,7 +685,7 @@ export default function ExamsPage() {
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-red-600">
-              <AlertTriangle size={18} /> 确认强制收卷
+              <AlertTriangle size={18} /> 确认强制收卷 <PBadge p="P1" />
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-3 py-1 text-sm">
@@ -770,8 +771,8 @@ export default function ExamsPage() {
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>
-              {newExam.title.includes('（副本）') ? '复制考试' : '创建考试'}
+            <DialogTitle className="flex items-center gap-1.5">
+              {newExam.title.includes('（副本）') ? <>复制考试 <PBadge p="P2" /></> : <>创建考试 <PBadge p="P0" /></>}
             </DialogTitle>
             {newExam.title.includes('（副本）') && (
               <DialogDescription>已预填原考试配置，请设置新的考试时间后保存。</DialogDescription>
@@ -886,7 +887,7 @@ export default function ExamsPage() {
 
             {/* Anti-cheat */}
             <section>
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">防作弊设置</p>
+              <p className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">防作弊设置 <PBadge p="P0" /></p>
               <div className="space-y-2">
                 {antiCheatItems.map(({ key, label }) => (
                   <label key={key} className="flex items-center gap-2 text-xs cursor-pointer">

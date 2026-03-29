@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
+import { PBadge } from '@/components/ui/pbadge';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
@@ -118,7 +119,7 @@ export default function AdminAnalysisPage() {
           </Select>
           <Button size="sm" variant="outline" className="text-xs gap-1"
             onClick={() => toast.info('导出功能（演示）')}>
-            <Download size={12} /> 导出 ▾
+            <Download size={12} /> 导出 ▾ <PBadge p="P0" />
           </Button>
         </div>
       </div>
@@ -177,7 +178,7 @@ export default function AdminAnalysisPage() {
             <Card className="shadow-none border">
               <CardContent className="p-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold text-gray-800">班级对比</h3>
+                  <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">班级对比 <PBadge p="P0" /></h3>
                   <p className="text-xs text-muted-foreground">点击班级名查看学生明细</p>
                 </div>
                 <ResponsiveContainer width="100%" height={200}>
@@ -262,7 +263,7 @@ export default function AdminAnalysisPage() {
         <Card className="shadow-none border">
           <CardContent className="p-5">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-gray-800">知识点得分率热力图</h3>
+              <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">知识点得分率热力图 <PBadge p="P2" /></h3>
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                 {[{ c: 'bg-green-100', l: '≥80' }, { c: 'bg-blue-100', l: '60-79' },
                   { c: 'bg-yellow-100', l: '50-59' }, { c: 'bg-red-100', l: '<50' }].map(x => (
@@ -317,10 +318,10 @@ export default function AdminAnalysisPage() {
         <Card className="shadow-none border">
           <CardContent className="p-5">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-gray-800">教师工作量 — 2025-2026 第二学期</h3>
+              <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">教师工作量 — 2025-2026 第二学期 <PBadge p="P2" /></h3>
               <Button size="sm" variant="outline" className="text-xs gap-1"
                 onClick={() => toast.info('导出Excel（演示）')}>
-                <Download size={11} /> 导出Excel
+                <Download size={11} /> 导出Excel <PBadge p="P0" />
               </Button>
             </div>
             <table className="w-full text-sm">
@@ -346,7 +347,7 @@ export default function AdminAnalysisPage() {
                       {t.pendingGrade > 0 && (
                         <button className="text-xs text-orange-600 hover:underline flex items-center gap-1"
                           onClick={() => toast.success(`已向${t.name}老师发送阅卷催促`)}>
-                          <Bell size={11} /> 催促
+                          <Bell size={11} /> 催促 <PBadge p="P2" />
                         </button>
                       )}
                     </td>
@@ -363,7 +364,7 @@ export default function AdminAnalysisPage() {
         <Card className="shadow-none border">
           <CardContent className="p-5">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-gray-800">历史趋势（同课程跨学期）</h3>
+              <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">历史趋势（同课程跨学期）<PBadge p="P2" /></h3>
               <Badge variant="secondary" className="text-xs text-green-700 bg-green-50">近三年 +12.1分 ↑</Badge>
             </div>
             <ResponsiveContainer width="100%" height={200}>

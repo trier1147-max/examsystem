@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
+import { PBadge } from '@/components/ui/pbadge';
 import { mockStudentScores } from '@/mock/data';
 import { useStore } from '@/store/useStore';
 import { cn } from '@/lib/utils';
@@ -59,7 +60,7 @@ export default function StudentScoresPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">成绩查询</h1>
+          <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">成绩查询 <PBadge p="P0" /></h1>
           <p className="text-sm text-muted-foreground mt-0.5">
             {currentUser?.name} · {currentUser?.class}
           </p>
