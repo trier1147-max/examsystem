@@ -2,19 +2,16 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { GraduationCap, BookOpen, Shield, ChevronRight, User, Lock, Users } from 'lucide-react';
+import { GraduationCap, BookOpen, Shield, ChevronRight, User, Lock } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
-} from '@/components/ui/dialog';
 import { useStore } from '@/store/useStore';
 import { mockTeacher, mockStudent, mockAdmin } from '@/mock/data';
 import { cn } from '@/lib/utils';
 
-type RoleKey = 'teacher' | 'student' | 'admin' | 'multi';
+type RoleKey = 'teacher' | 'student' | 'admin';
 
 const roles = [
   {
@@ -44,21 +41,6 @@ const roles = [
     password: '123456',
     color: '#7c3aed',
   },
-  {
-    key: 'multi' as RoleKey,
-    label: '多角色用户',
-    desc: '教师兼教学秘书',
-    icon: Users,
-    account: 'multi001',
-    password: '123456',
-    color: '#b45309',
-  },
-];
-
-// Multi-role user's available roles
-const MULTI_ROLE_OPTIONS = [
-  { key: 'teacher' as const, label: '教师', desc: '课程：数据结构、计算机网络', color: '#002045', icon: BookOpen },
-  { key: 'admin' as const,   label: '行政管理（信息学院）', desc: '学院教学秘书', color: '#7c3aed', icon: Shield },
 ];
 
 export default function LoginPage() {
@@ -66,7 +48,6 @@ export default function LoginPage() {
   const { setUser } = useStore();
   const [selectedRole, setSelectedRole] = useState<RoleKey | null>(null);
   const [loading, setLoading] = useState(false);
-  const [roleSelectorOpen, setRoleSelectorOpen] = useState(false);
 
   const currentRole = roles.find((r) => r.key === selectedRole);
 
@@ -84,24 +65,8 @@ export default function LoginPage() {
     } else if (selectedRole === 'admin') {
       setUser(mockAdmin);
       router.push('/admin/dashboard');
-    } else if (selectedRole === 'multi') {
-      // Multi-role: show role selector dialog
-      setLoading(false);
-      setRoleSelectorOpen(true);
-      return;
     }
     setLoading(false);
-  };
-
-  const handleMultiRoleSelect = (key: 'teacher' | 'admin') => {
-    setRoleSelectorOpen(false);
-    if (key === 'teacher') {
-      setUser(mockTeacher);
-      router.push('/teacher');
-    } else {
-      setUser(mockAdmin);
-      router.push('/admin/dashboard');
-    }
   };
 
   return (
@@ -138,7 +103,7 @@ export default function LoginPage() {
           </div>
 
           {/* Role selection */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-3">
             {roles.map(({ key, label, desc, icon: Icon, color }) => (
               <button
                 key={key}
@@ -225,46 +190,6 @@ export default function LoginPage() {
           )}
         </div>
       </div>
-
-      {/* ── Multi-role selector dialog ── */}
-      <Dialog open={roleSelectorOpen} onOpenChange={setRoleSelectorOpen}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Users size={18} className="text-amber-600" />
-              选择当前登录角色
-            </DialogTitle>
-            <DialogDescription>
-              你的账号绑定了多个角色，请选择本次登录要使用的身份
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-2 py-1">
-            {MULTI_ROLE_OPTIONS.map(opt => {
-              const Icon = opt.icon;
-              return (
-                <button
-                  key={opt.key}
-                  onClick={() => handleMultiRoleSelect(opt.key)}
-                  className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-border hover:shadow-md transition-all text-left"
-                  style={{ borderColor: opt.color + '40' }}
-                >
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: opt.color + '15' }}
-                  >
-                    <Icon size={20} style={{ color: opt.color }} />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-sm text-gray-900">{opt.label}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{opt.desc}</p>
-                  </div>
-                  <ChevronRight size={16} className="ml-auto text-muted-foreground" />
-                </button>
-              );
-            })}
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

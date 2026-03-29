@@ -2,12 +2,21 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Clock, BookOpen, TrendingUp, Trophy, ChevronRight, CalendarDays, Info, FileX2 } from 'lucide-react';
+import { toast } from 'sonner';
+import {
+  Clock, BookOpen, ChevronRight, CalendarDays, Info, FileX2,
+  FileQuestion, CheckCircle2,
+} from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from '@/components/ui/dialog';
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select';
 import { useStore } from '@/store/useStore';
 import { mockExams, mockStudentScores, mockQuestions } from '@/mock/data';
 import { cn } from '@/lib/utils';
@@ -24,11 +33,17 @@ const upcomingExams = mockExams
     return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
   });
 
-// Compute derived stats from historical scores
 const avgPct = mockStudentScores.length
   ? Math.round(mockStudentScores.reduce((s, r) => s + (r.score / r.totalScore) * 100, 0) / mockStudentScores.length)
   : 0;
 const latestRank = mockStudentScores[0];
+
+const DEFER_REASONS = [
+  '因病（需提供病假证明）',
+  '参加公务活动',
+  '家庭紧急情况',
+  '其他原因',
+];
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -42,8 +57,7 @@ function formatCountdown(seconds: number) {
 
 function daysUntil(dateStr: string) {
   const target = new Date(dateStr);
-  const diff = Math.ceil((target.getTime() - NOW.getTime()) / (1000 * 60 * 60 * 24));
-  return diff;
+  return Math.ceil((target.getTime() - NOW.getTime()) / (1000 * 60 * 60 * 24));
 }
 
 function urgencyLabel(dateStr: string) {
@@ -84,7 +98,23 @@ export default function StudentHomePage() {
   const { currentUser } = useStore();
   const [noticeExam, setNoticeExam] = useState<typeof upcomingExams[0] | null>(null);
 
-  // Countdown timer for ongoing exam end time
+  // ── Defer apply state ──
+  const [deferExam, setDeferExam] = useState<typeof upcomingExams[0] | null>(null);
+  const [deferReason, setDeferReason] = useState('');
+  const [deferNote, setDeferNote] = useState('');
+  const [appliedIds, setAppliedIds] = useState<Set<string>>(new Set());
+
+  const handleDeferSubmit = () => {
+    if (!deferExam) return;
+    if (!deferReason) { toast.error('请选择缓考原因'); return; }
+    setAppliedIds(prev => new Set(prev).add(deferExam.id));
+    toast.success('缓考申请已提交，等待教学秘书审批');
+    setDeferExam(null);
+    setDeferReason('');
+    setDeferNote('');
+  };
+
+  // ── Countdown for ongoing exam ──
   const ongoingExam = upcomingExams.find(e => e.status === 'ongoing');
   const [countdownSec, setCountdownSec] = useState(() => {
     if (!ongoingExam) return 0;
@@ -101,6 +131,7 @@ export default function StudentHomePage() {
 
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-5">
+
       {/* ── Personal info card ────────────────────────────────────── */}
       <div
         className="rounded-2xl p-6 text-white"
@@ -152,6 +183,7 @@ export default function StudentHomePage() {
             {upcomingExams.map(exam => {
               const isOngoing = exam.status === 'ongoing';
               const urgency = isOngoing ? null : urgencyLabel(exam.startTime);
+              const hasApplied = appliedIds.has(exam.id);
 
               return (
                 <div
@@ -167,9 +199,7 @@ export default function StudentHomePage() {
                       <div className="flex items-start gap-2 flex-1 min-w-0">
                         <span className={cn(
                           'text-xs font-semibold px-2 py-0.5 rounded-full flex-shrink-0 mt-0.5',
-                          isOngoing
-                            ? 'bg-red-100 text-red-600'
-                            : 'bg-blue-100 text-blue-600'
+                          isOngoing ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'
                         )}>
                           {isOngoing ? '进行中' : '未开始'}
                         </span>
@@ -183,7 +213,7 @@ export default function StudentHomePage() {
                     </div>
 
                     {/* Meta */}
-                    <p className="text-xs text-muted-foreground mt-1.5 ml-0">
+                    <p className="text-xs text-muted-foreground mt-1.5">
                       {exam.startTime} · {exam.duration} 分钟 · {exam.totalScore} 分
                     </p>
 
@@ -203,13 +233,32 @@ export default function StudentHomePage() {
                     'flex items-center justify-between px-4 py-2.5 border-t',
                     isOngoing ? 'bg-red-50/20 border-red-100' : 'bg-gray-50/50 border-gray-100'
                   )}>
-                    <button
-                      onClick={() => setNoticeExam(exam)}
-                      className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-gray-900 transition-colors"
-                    >
-                      <Info size={13} />
-                      查看考试须知
-                    </button>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => setNoticeExam(exam)}
+                        className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-gray-900 transition-colors"
+                      >
+                        <Info size={13} />
+                        考试须知
+                      </button>
+                      {/* 申请缓考：仅未开始的考试可申请 */}
+                      {!isOngoing && (
+                        hasApplied ? (
+                          <span className="flex items-center gap-1 text-xs text-green-600 font-medium">
+                            <CheckCircle2 size={12} />
+                            已申请缓考
+                          </span>
+                        ) : (
+                          <button
+                            onClick={() => setDeferExam(exam)}
+                            className="flex items-center gap-1.5 text-xs text-amber-600 hover:text-amber-800 transition-colors"
+                          >
+                            <FileQuestion size={13} />
+                            申请缓考
+                          </button>
+                        )
+                      )}
+                    </div>
                     {isOngoing && (
                       <Link href={`/student/exam/${exam.id}`}>
                         <Button
@@ -246,13 +295,13 @@ export default function StudentHomePage() {
                     </span>
                     <p className="font-semibold text-sm text-gray-700">{exam.title}</p>
                   </div>
-                  <div className="ml-0 space-y-0.5 text-xs text-muted-foreground">
+                  <div className="space-y-0.5 text-xs text-muted-foreground">
                     <p>原考试时间：<span className="line-through">{exam.originalTime}</span></p>
                     <p>补考时间：<span className="text-blue-600 font-medium">{exam.supplementTime}</span> · {exam.duration} 分钟</p>
-                    <p className="text-xs text-gray-400 mt-1">{exam.reason}</p>
+                    <p className="text-gray-400 mt-1">{exam.reason}</p>
                   </div>
                 </div>
-                <div className="px-4 py-2 border-t bg-gray-100/60 flex items-center gap-2">
+                <div className="px-4 py-2 border-t bg-gray-100/60">
                   <span className="text-xs text-muted-foreground">请在补考日期前保持手机畅通，如有疑问请联系教学秘书</span>
                 </div>
               </div>
@@ -284,9 +333,7 @@ export default function StudentHomePage() {
               </div>
 
               <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 space-y-1.5">
-                <p className="text-xs font-semibold text-amber-800 flex items-center gap-1">
-                  ⚠️ 考试规则
-                </p>
+                <p className="text-xs font-semibold text-amber-800">⚠️ 考试规则</p>
                 {[
                   '考试期间浏览器将进入全屏模式',
                   '禁止切换到其他页面或应用程序',
@@ -322,6 +369,85 @@ export default function StudentHomePage() {
               onClick={() => setNoticeExam(null)}
             >
               我知道了
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Defer apply dialog ───────────────────────────────────── */}
+      <Dialog open={!!deferExam} onOpenChange={open => { if (!open) { setDeferExam(null); setDeferReason(''); setDeferNote(''); } }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FileQuestion size={16} className="text-amber-600" />
+              申请缓考
+            </DialogTitle>
+            <DialogDescription>
+              申请提交后将由教学秘书审核，请如实填写原因
+            </DialogDescription>
+          </DialogHeader>
+
+          {deferExam && (
+            <div className="space-y-4">
+              {/* Exam info */}
+              <div className="rounded-lg bg-amber-50 border border-amber-100 p-3">
+                <p className="font-semibold text-sm text-gray-900">{deferExam.title}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  考试时间：{deferExam.startTime} · {deferExam.duration} 分钟
+                </p>
+              </div>
+
+              {/* Reason select */}
+              <div className="space-y-1.5">
+                <Label className="text-sm">缓考原因 <span className="text-red-500">*</span></Label>
+                <Select value={deferReason} onValueChange={(v) => setDeferReason(v ?? '')}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="请选择原因" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {DEFER_REASONS.map(r => (
+                      <SelectItem key={r} value={r}>{r}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Note textarea */}
+              <div className="space-y-1.5">
+                <Label className="text-sm">
+                  详细说明
+                  <span className="text-xs text-muted-foreground ml-1">（可选，最多 200 字）</span>
+                </Label>
+                <Textarea
+                  placeholder="请补充说明具体情况，如就医日期、证明材料等"
+                  value={deferNote}
+                  onChange={e => setDeferNote(e.target.value.slice(0, 200))}
+                  className="resize-none"
+                  rows={3}
+                />
+                <p className="text-xs text-muted-foreground text-right">{deferNote.length}/200</p>
+              </div>
+
+              <div className="rounded-lg bg-blue-50 border border-blue-100 p-3">
+                <p className="text-xs text-blue-700">
+                  提交后需上传相关证明材料（病假单、公务证明等），请前往"成绩与申请"页面补充附件
+                </p>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="gap-2">
+            <Button variant="outline" size="sm" onClick={() => { setDeferExam(null); setDeferReason(''); setDeferNote(''); }}>
+              取消
+            </Button>
+            <Button
+              size="sm"
+              className="text-white gap-1"
+              style={{ background: '#d97706' }}
+              onClick={handleDeferSubmit}
+              disabled={!deferReason}
+            >
+              提交申请
             </Button>
           </DialogFooter>
         </DialogContent>
